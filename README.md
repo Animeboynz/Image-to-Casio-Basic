@@ -30,9 +30,3 @@ Clearing the screen before starting to draw is advised
 
 Some images might output code too long for a single calculator program (as casio has a limit for how many lines each program can have) so just split it into 2 programs and dont clear the screen between them and it should work fine.
 
-<img src="Images/1.jpg" alt="" width="270" />
-<img src="Images/1.jpg" alt="" width="270" />
-<img src="Images/1.jpg" alt="" width="270" />
-<img src="Images/1.jpg" alt="" width="270" />
-<img src="Images/1.jpg" alt="" width="270" />
-<img src="Images/1.jpg" alt="" width="270" />
