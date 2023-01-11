@@ -12,7 +12,7 @@ So here's my attempt at it.
 
 ## Installation
 
-Go to [Releases]() and download the latest one.
+Go to [Releases](https://github.com/Animeboynz/Image-to-Casio-Basic/releases) and download the latest one.
 
 
 ## Usage
