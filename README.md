@@ -8,6 +8,8 @@ Well, I did but unfortunately, I couldn't find a single other person who has don
 
 So here's my attempt at it.
 
+<img src="Images/Image 1.jpeg" alt="Image" width="600" />
+
 ## Installation
 
 Go to [Releases]() and download the latest one.
