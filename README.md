@@ -15,7 +15,18 @@ Go to [Releases]() and download the latest one.
 
 ## Usage
 
-Create a folder and have your image and the .exe inside it.
+1. Create a folder and have your image and the .exe inside it.
+2. Open the executable and select your image file.
+3. This program will first convert it into B&W and resize it to fit your calculator.
+4. Pick your preferred image from the options that it provides.
+5. Save it to a location.
+6. Open CASIO-FA124, paste the output program and upload to your calculator
+
+## Things to note
+Clearing the screen before starting to draw is advised
+(SHIFT + VARS, F6, F1, F2)
+
+Some images might output code too long for a single calculator program (as casio has a limit for how many lines each program can have) so just split it into 2 programs and dont clear the screen between them and it should work fine.
 
 <img src="Images/1.jpg" alt="" width="270" />
 <img src="Images/1.jpg" alt="" width="270" />
