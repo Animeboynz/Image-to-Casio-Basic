@@ -12,8 +12,9 @@ So here's my attempt at it.
 
 ## Installation
 
-Go to [Releases](https://github.com/Animeboynz/Image-to-Casio-Basic/releases) and download the latest one.
 
+1. Go to [Releases](https://github.com/Animeboynz/Image-to-Casio-Basic/releases) and download the latest exe.
+2. Download the index.html and use it
 
 ## Usage
 

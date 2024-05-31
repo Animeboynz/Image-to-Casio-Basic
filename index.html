@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Threshold Adjuster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        .section {
+            background-color: #6e6e6e;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section h2 {
+            margin-bottom: 10px;
+        }
+        .section input[type="file"],
+        .section input[type="range"],
+        .section p {
+            border-radius: 10px;
+            padding: 5px;
+        }
+        #preview {
+            max-width: 100%;
+            display: block;
+            margin: 20px auto; /* Center the image horizontally */
+            border-radius: 0px; /* Remove border-radius */
+        }
+        #output {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background-color: white;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Image to Casio Converter</h1>
+
+    <!-- Section 1: Upload Image -->
+    <div class="section" id="upload-image">
+        <h2>Upload Image</h2>
+        <input type="file" id="imageInput" accept="image/*">
+    </div>
+
+    <!-- Section 2: Adjust B/W Threshold -->
+    <div class="section" id="adjust-threshold">
+        <h2>Adjust B/W Threshold</h2>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <img id="preview" alt="Thresholded Image Preview">
+        <input type="range" id="thresholdSlider" min="0" max="255" value="128">
+    </div>
+
+    <!-- Section 3: Copy Code -->
+    <div class="section" id="copy-code">
+        <h2>Copy Code</h2>
+        <textarea id="output" rows="5" readonly></textarea>
+    </div>
+</div>
+
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const canvas = document.getElementById('canvas');
+    const preview = document.getElementById('preview');
+    const thresholdSlider = document.getElementById('thresholdSlider');
+    const output = document.getElementById('output');
+
+    let originalImage = null;
+    let rescaledImage = null;
+
+    imageInput.addEventListener('change', handleImageUpload);
+    thresholdSlider.addEventListener('input', updateThreshold);
+
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImage = img;
+                    rescaleImage();
+                    applyThreshold();
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function rescaleImage() {
+        const maxWidth = 127;
+        const maxHeight = 63;
+        const originalWidth = originalImage.width;
+        const originalHeight = originalImage.height;
+
+        let width = originalWidth;
+        let height = originalHeight;
+
+        // Scale down while keeping aspect ratio
+        if (width > maxWidth || height > maxHeight) {
+            const widthRatio = maxWidth / width;
+            const heightRatio = maxHeight / height;
+            const scale = Math.min(widthRatio, heightRatio);
+            width = Math.floor(width * scale);
+            height = Math.floor(height * scale);
+        }
+
+        canvas.width = maxWidth;
+        canvas.height = maxHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, maxWidth, maxHeight); // Fill the canvas with white
+        ctx.drawImage(originalImage, 0, 0, width, height); // Draw scaled image on canvas
+
+        // Save the rescaled image data
+        rescaledImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
+
+    function applyThreshold() {
+        if (!rescaledImage) return;
+
+        const threshold = thresholdSlider.value;
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.createImageData(rescaledImage);
+        const data = imageData.data;
+        const originalData = rescaledImage.data;
+
+        let outputText = '';
+
+        for (let y = 0; y < canvas.height; y++) {
+            for (let x = 0; x < canvas.width; x++) {
+                const index = (y * canvas.width + x) * 4;
+                const r = originalData[index];
+                const g = originalData[index + 1];
+                const b = originalData[index + 2];
+                const avg = (r + g + b) / 3;
+                if (avg < threshold) {
+                    const pxlX = x + 1; // Convert from 0-based to 1-based
+                    const pxlY = y + 1; // Convert from 0-based to 1-based
+                    outputText += `PxlOn ${pxlX},${pxlY}Ù\n`;
+                }
+                const color = avg >= threshold ? 255 : 0;
+                data[index] = data[index + 1] = data[index + 2] = color;
+                data[index + 3] = 255; // Alpha channel
+            }
+        }
+
+        output.value = outputText;
+        ctx.putImageData(imageData, 0, 0);
+        preview.src = canvas.toDataURL();
+    }
+
+
+    function updateThreshold() {
+        applyThreshold();
+    }
+</script>
+</body>
+</html>
