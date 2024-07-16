@@ -8,6 +8,8 @@ Well, I did but unfortunately, I couldn't find a single other person who has don
 
 So here's my attempt at it.
 
+### Note: The original code was lost and I am currently remaking the C++ code. There is also a HTML version if you wanted to try this out as well
+
 <img src="Images/Image 1.jpeg" alt="Image" width="600" />
 
 ## Installation
